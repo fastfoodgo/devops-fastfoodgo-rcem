@@ -13,7 +13,7 @@ on:
       - main
 
 jobs:
-  tests:
+  test-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,16 +24,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r src/requirements.txt
-          pip install pytest
+          pip install -e ".[dev]"
+          pip install build
 
       - name: Run tests
-        run: |
-          pytest tests
+        run: pytest
 
       - name: Build package
         run: python -m build
