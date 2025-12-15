@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Restaurant API
+  description: API pour la gestion des restaurants et des commandes
+  version: 1.0.0
+
+paths:
+  /restaurant/{restaurantID}:
+    get:
+      summary: Obtenir les informations d'un restaurant
+      description: Permet d'avoir les informations d'un restaurant
+      operationId: getRestaurant
+      parameters:
+        - name: restaurantID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID du restaurant
+      responses:
+        '200':
+          description: Informations du restaurant
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nom:
+                    type: string
+                    example: "resto"
+                  description:
+                    type: string
+                    example: "très bon resto"
+        '404':
+          description: Restaurant non trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "Not Found"
+
+  /restaurants/:
+    get:
+      summary: Obtenir la liste des restaurants
+      description: Permet d'avoir la liste des restaurants
+      operationId: listRestaurants
+      responses:
+        '200':
+          description: Liste des restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nom:
+                      type: string
+                      example: "resto"
+                    description:
+                      type: string
+                      example: "très bon resto"
+        '404':
+          description: Aucun restaurant trouvé ou serveur inaccessible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /order/{orderID}:
+    get:
+      summary: Obtenir les informations d'une commande
+      description: Permet d'avoir les informations d'une commande
+      operationId: getOrder
+      parameters:
+        - name: orderID
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la commande
+      responses:
+        '200':
+          description: Informations de la commande
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ID:
+                    type: string
+                    example: "12345"
+                  utilisateur:
+                    type: string
+                    example: "user1"
+                  commande:
+                    type: string
+                    example: "1 burger"
+        '404':
+          description: Commande non trouvée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "Not Found"
+
+  /order/:
+    put:
+      summary: Créer une commande
+      description: Permet de créer une commande
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant:
+                  type: string
+                produits:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Commande créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Commande créée"
+                  details:
+                    type: string
+        '400':
+          description: Requête mal formulée ou paramètres manquants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+        '500':
+          description: Serveur base de données inaccessible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
